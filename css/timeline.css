@@ -1,0 +1,360 @@
+/* El mapa ocupa TODA la pantalla detrás */
+#map-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 0;
+}
+
+#uptime-header {
+    position: fixed;       /* Se queda pegado a la pantalla */
+    top: 0;                /* Pegado arriba del todo */
+    left: 0;
+    width: 100%;           /* Ocupa todo el ancho */
+    height: 70px;          /* Altura fija */
+    background-color: white; /* Fondo blanco sólido para probar */
+    z-index: 9999;         /* Nivel MUY alto para que nada lo tape */
+    
+    /* Centramos el texto */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    /* Una sombra para que se note la separación */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+#uptime-clock {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ff4d4d;
+}
+
+/* --- TARJETA FLOTANTE (Info Card) --- */
+.info-card {
+    position: fixed;
+    bottom: 100px; /* Encima de la barra de tiempo */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    z-index: 100;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.card-date {
+    color: #ff4d4d;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.card-title {
+    margin: 10px 0;
+    font-size: 1.3rem;
+    color: #333;
+}
+
+.btn-view {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.timeline-bar-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: white;
+    z-index: 100;
+    
+    /* CAMBIO IMPORTANTE: Quitamos center y ponemos flex-start */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Alineado a la izquierda para permitir scroll */
+    
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    
+    /* Habilitar scroll suave */
+    overflow-x: auto; 
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* Clave para iPhone */
+}
+
+/* Opcional: Ocultar la barra de scroll fea pero mantener la función */
+.timeline-bar-container::-webkit-scrollbar {
+    display: none;
+}
+
+.timeline-track {
+    display: flex;
+    align-items: center;
+    gap: 40px; /* Más espacio entre puntos para dedos gordos */
+    padding: 0 40px; /* Margen a los lados para que el primero y último no queden pegados */
+    
+    /* CAMBIO: Asegura que la línea gris ocupe todo el ancho real del scroll */
+    min-width: max-content; 
+    position: relative;
+}
+
+/* Ajuste de la línea gris para que no se corte */
+.timeline-track::before {
+    content: '';
+    position: absolute;
+    left: 40px;
+    right: 40px;
+    top: 50%;
+    height: 2px;
+    background: #e0e0e0;
+    z-index: -1;
+    width: calc(100% - 80px); /* Calculamos el ancho exacto */
+}
+
+.timeline-dot {
+    width: 15px;
+    height: 15px;
+    background: #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.timeline-dot.active {
+    background: #ff4d4d;
+    transform: scale(1.5); /* El punto activo es más grande */
+    box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+}
+
+/* Estilos del Modal (Popup) */
+.modal {
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hidden { display: none; }
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 90%;
+    max-height: 90%;
+    overflow-y: auto;
+    text-align: center;
+    position: relative;
+}
+
+.close-modal {
+    position: sticky; /* Truco: Se queda pegado arriba aunque bajes */
+    top: 10px;
+    left: 90%; /* Lo tiramos a la derecha */
+    /* Diseño de botón */
+    background-color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Círculo perfecto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Sombra para que flote */
+    z-index: 50; /* Encima de las fotos */
+    color: #ff4d4d;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: -40px; /* Truco para que no empuje el contenido hacia abajo */
+}
+
+#modal-img {
+    max-width: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* Estilo para la grilla de fotos dentro del modal */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Columnas automáticas */
+    gap: 10px;
+    margin-bottom: 15px;
+    max-height: 60vh; /* Altura máxima para que se pueda scrollear */
+    overflow-y: auto; /* Scroll si hay muchas fotos */
+}
+
+.gallery-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover; /* Corta la imagen para que sea cuadrada perfecta */
+    border-radius: 8px;
+    transition: transform 0.3s;
+    cursor: pointer;
+}
+
+/* Efecto al tocar una foto: se hace grande (opcional) */
+.gallery-img:active {
+    transform: scale(1.5);
+    z-index: 10;
+}
+
+/* --- ESTILOS DE PANTALLA COMPLETA (ZOOM) --- */
+#fullscreen-modal {
+    z-index: 3000; /* ¡Más alto que el otro modal! */
+    background-color: rgba(0, 0, 0, 0.95); /* Fondo negro casi opaco */
+    cursor: zoom-out;
+}
+
+#fullscreen-img {
+    max-width: 95vw;  /* 95% del ancho de la pantalla */
+    max-height: 95vh; /* 95% del alto de la pantalla */
+    object-fit: contain; /* Asegura que la foto se vea entera sin recortarse */
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s;
+}
+
+#fullscreen-img:hover {
+    transform: scale(1.02); /* Efecto sutil al pasar el mouse */
+}
+
+/* Botón flotante del menú */
+#menu-btn {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    z-index: 1001; /* Encima del header */
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    padding: 5px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Contenedor del menú (Overlay) */
+#chapter-menu {
+    position: fixed;
+    top: 0;
+    right: 0; /* Sale desde la derecha */
+    width: 80%; /* Ocupa casi toda la pantalla en celular */
+    max-width: 300px;
+    height: 100vh;
+    background: white;
+    z-index: 2000;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    padding: 0;
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+}
+
+/* Ocultar menú moviéndolo fuera de la pantalla */
+#chapter-menu.hidden {
+    transform: translateX(100%);
+    display: block; /* Sobrescribimos el display none del hidden genérico para usar transform */
+}
+
+.menu-header {
+    /* --- NUEVO --- */
+    position: sticky;
+    top: 0;
+    background-color: white; /* Fondo blanco para tapar la lista que pasa por debajo */
+    z-index: 10;
+    padding: 20px 20px 10px 20px; /* Arriba, Derecha, Abajo, Izquierda */
+    /* ------------- */
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #eee;
+
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.menu-header h3 {
+    color: #ff4d4d;
+    margin: 0;
+}
+
+/* Lista de capítulos */
+#chapter-list {
+    list-style: none;
+    padding: 0 20px 20px 20px; /* Margen a los lados y abajo */
+    margin: 0;
+}
+
+#chapter-list li {
+    padding: 15px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #555;
+    transition: background 0.2s;
+}
+
+#chapter-list li:hover {
+    background-color: #ffe6e6;
+    color: #ff4d4d;
+}
+
+#chapter-list li.active {
+    font-weight: bold;
+    color: #ff4d4d;
+    border-left: 4px solid #ff4d4d;
+}
+
+/* Botón "X" del menú lateral */
+.close-menu {
+    /* Tamaño y forma circular */
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    
+    /* Colores: Fondo rosa pálido y X roja */
+    background-color: #ffe6e6; 
+    color: #ff4d4d;
+    
+    /* Centrar la X perfectamente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Estilo del texto */
+    font-size: 1.5rem; /* Tamaño de la X */
+    font-weight: bold;
+    line-height: 1; /* Para evitar desalineaciones verticales */
+    cursor: pointer;
+    
+    /* Transición suave para el hover */
+    transition: all 0.2s ease;
+}
+
+/* Efecto al pasar el mouse o tocar */
+.close-menu:hover {
+    background-color: #ff4d4d; /* Se vuelve rojo sólido */
+    color: white; /* La X se vuelve blanca */
+    transform: rotate(90deg); /* Un pequeño giro coqueto */
+}

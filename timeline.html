@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra Historia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/timeline.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+</head>
+<body>
+
+    <header id="uptime-header">
+        <div class="uptime-title">Tiempo juntos:</div>
+        <div id="uptime-clock">Calculando...</div>
+    
+    <button id="menu-btn" onclick="toggleMenu()">☰</button>
+
+    <div id="chapter-menu" class="hidden">
+        <div class="menu-header">
+            <h3>Nuestros Momentos</h3>
+            <span class="close-menu" onclick="toggleMenu()">&times;</span>
+        </div>
+        <ul id="chapter-list">
+            </ul>
+    </div>
+    </header>
+
+    <div id="map-container"></div>
+
+    <div id="info-overlay" class="info-card">
+        <div class="card-content">
+            <span class="card-date" id="card-date">Cargando...</span>
+            <h2 class="card-title" id="card-title">...</h2>
+            <button class="btn-view" onclick="verDetalleCompleto()">Ver recuerdo </button>
+        </div>
+    </div>
+
+    <div class="timeline-bar-container">
+        <div class="timeline-track" id="timeline-track">
+            </div>
+    </div>
+
+    <div id="memory-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            
+            <div id="gallery-container" class="gallery-grid"></div>
+            
+            <p id="modal-text"></p>
+        </div>
+    </div>
+
+    <div id="fullscreen-modal" class="modal hidden">
+    <span class="close-modal" onclick="cerrarPantallaCompleta()">&times;</span>
+    <img id="fullscreen-img" src="" alt="Full Screen">
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/map.js"></script>
+</body>
+</html>

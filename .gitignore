@@ -1,0 +1,12 @@
+# Dependencias de Node (se instalan con npm install)
+node_modules/
+
+# Archivos originales pesados
+fotos_raw/
+
+# Archivos de sistema de Mac/Windows (basura)
+.DS_Store
+Thumbs.db
+
+# Logs de errores
+npm-debug.log
