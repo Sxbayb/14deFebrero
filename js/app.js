@@ -15,7 +15,7 @@ noBtn.addEventListener('click', () => {
     yesBtn.style.padding = `${currentPadding}px ${currentPadding * 2.5}px`;
 
     // 3. (Opcional) Hacemos el texto del botón NO más chiquito o cambiamos el texto
-    const frases = ["¿Segura?", "¿En serio?", "Yaaapo papoecita", "AÑAÑOÑA"];
+    const frases = ["¿En serio?", "Yaaapo papoecita", "AÑAÑOÑA", "Yapo papoe", "Aseeptaaaa", "ChetiAcepta"];
     const fraseAleatoria = frases[Math.floor(Math.random() * frases.length)];
     noBtn.innerText = fraseAleatoria;
 });
